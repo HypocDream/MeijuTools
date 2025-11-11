@@ -1,269 +1,62 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>妹居存档编辑器</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f7fa;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 900px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin: 20px 0;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        
-        .description {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #7f8c8d;
-            font-size: 1rem;
-        }
-        
-        .file-input-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .file-input-label {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #3498db;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: 500;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .file-input-label:hover {
-            background-color: #2980b9;
-        }
-        
-        #fileInput {
-            display: none;
-        }
-        
-        .file-name {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-        
-        .editor-section {
-            margin-bottom: 20px;
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 300px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            resize: vertical;
-            line-height: 1.5;
-        }
-        
-        .button-section {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .editor-section {
-            margin-bottom: 25px;
-            border: 1px solid #e1e8ed;
-            border-radius: 8px;
-            padding: 15px;
-            background: #fafbfc;
-        }
-        
-        .section-heading {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-            font-size: 1.2rem;
-        }
-
-        #saveButton {
-            background-color: #2ecc71;
-            color: white;
-        }
-        
-        #saveButton:hover:not(:disabled) {
-            background-color: #27ae60;
-        }
-        
-        #resetButton {
-            background-color: #e74c3c;
-            color: white;
-        }
-        
-        #resetButton:hover {
-            background-color: #c0392b;
-        }
-        
-        button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        .status-message {
-            text-align: center;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        /* 横屏优化 */
-        @media (orientation: landscape) {
-            .container {
-                max-width: 95%;
-            }
-            
-            textarea {
-                min-height: 400px;
-            }
-            
-            .file-input-section {
-                flex-direction: row;
-                justify-content: center;
-                gap: 20px;
-            }
-            
-            .file-name {
-                margin-top: 0;
-            }
-        }
-        
-        /* 竖屏优化 */
-        @media (orientation: portrait) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            textarea {
-                min-height: 350px;
-            }
-        }
-        
-        /* 小屏幕优化 */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .button-section {
-                flex-direction: column;
-            }
-            
-            button {
-                width: 100%;
-            }
-        }
-    </style>
+    <title>JSON人物属性编辑器</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
+
 <body>
     <div class="container">
-        <h1>妹居存档编辑器</h1>
-        <p class="description">选择存档文件进行编辑，修改完成后保存到本地</p>
-        
-        <div class="file-input-section">
-            <label for="fileInput" class="file-input-label">选择文件</label>
-            <div class="file-name" id="fileName">未选择文件</div>
+        <header>
+            <h1>妹居存档编辑器</h1>
+            <p class="description">选择存档文件后，即可编辑相应人设信息</p>
+        </header>
+
+        <div class="main-content">
+            <div class="file-input-section">
+                <label for="fileInput" class="file-input-label">选择JSON存档文件</label>
+                <div class="file-name" id="fileName">未选择文件</div>
+            </div>
+            <input type="file" id="fileInput" accept="application/json">
+
+            <div class="selector-section" id="selectorSection" style="display: none;">
+                <label for="personSelector" class="selector-label">选择人设：</label>
+                <select id="personSelector" class="person-selector">
+                    <option value="">-- 请选择一个人设 --</option>
+                </select>
+            </div>
+
+            <div id="editorContainer">
+                <div class="empty-state" id="emptyState">
+                    <div>📁</div>
+                    <p>请选择一个JSON存档文件开始编辑</p>
+                </div>
+
+                <div class="editor-sections" id="editorSections">
+                    <div class="editor-section" id="editorSection" style="display: none;">
+                        <div class="section-heading" id="sectionHeading">人物属性</div>
+                        <div class="properties-container" id="propertiesContainer">
+                            <!-- 属性编辑区域将在这里动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-section">
+                <button id="saveButton" disabled>保存文件</button>
+                <button id="resetButton" disabled>重置内容</button>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
         </div>
-        <input type="file" id="fileInput" accept=".txt,.js,.css,.html,.json,.md,.xml,.csv">
-        
-        <div class="editor-section" id="jsonSections">
-            <!-- <textarea id="fileContent" placeholder="文件内容将显示在这里..."></textarea> -->
-        </div>
-        
-        <div class="button-section">
-            <button id="saveButton" disabled>保存文件</button>
-            <button id="resetButton">重置内容</button>
-        </div>
-        
-        <div id="statusMessage" class="status-message"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const fileInput = document.getElementById('fileInput');
-            // const fileContent = document.getElementById('fileContent');
-            const saveButton = document.getElementById('saveButton');
-            const resetButton = document.getElementById('resetButton');
-            const fileNameDisplay = document.getElementById('fileName');
-            const statusMessage = document.getElementById('statusMessage');
-
+        document.addEventListener('DOMContentLoaded', function () {
+            // 常量部分
             const translation = new Map([
                 ['sister-dilei', '地雷妹'],
                 ['sister-high', '高好感度(70+)'],
@@ -281,73 +74,167 @@
                 ['creator_notes', '创作者备注'],
                 ['tags', '标签']
             ]);
+            const fileInput = document.getElementById('fileInput');             // 文件输入元素
+            const fileNameDisplay = document.getElementById('fileName');       // 文件名显示元素
+            const personSelector = document.getElementById('personSelector');   // 人设选择器
+            const editorSections = document.getElementById('editorSections');   // 编辑区域容器
+            const editorSection = {};   // 编辑区域元素组
 
-            const promptsEditors = {};
-            
-            let currentFile = null;
-            let originalFileJson = {};
-            
+            let saveObj = null;   // 存档对象
+            let saveObj_original = null; // 原始存档对象备份
+
+            // 显示状态消息
+            function showStatusMessage(message, type) {
+                const statusMessage = document.getElementById('statusMessage');
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                statusMessage.style.display = 'block';
+
+                // 3秒后自动隐藏成功消息
+                if (type === 'success') {
+                    setTimeout(hideStatusMessage, 3000);
+                }
+            }
+
+            // 隐藏状态消息
+            function hideStatusMessage() {
+                const statusMessage = document.getElementById('statusMessage');
+                statusMessage.style.display = 'none';
+            }
+
+            // 填充下拉框选择器
+            const populatePersonSelector = (saveObj) => {
+                const personSelector = document.getElementById('personSelector');
+                const selectorSection = document.getElementById('selectorSection');
+                // 清空选择器
+                personSelector.innerHTML = '<option id="tempOption" value="">-- 请选择一个人设进行编辑 --</option>';
+
+                // 添加选项及编辑列表
+                Object.keys(saveObj.data.prompts).forEach(prompt => {
+                    // 创建添加选项
+                    const option = document.createElement('option');
+                    option.value = translation.get(prompt) || prompt;
+                    option.textContent = option.value;
+                    personSelector.appendChild(option);
+                    selectorSection.style.display = 'block';
+                    // 创建添加编辑区域组容器(先隐藏)
+                    editorSection[prompt] = {};
+                    editorSection[prompt]['mainContainer'] = document.createElement('div');
+                    editorSection[prompt]['mainContainer'].className = 'editor-section';
+                    editorSection[prompt]['mainContainer'].style.display = 'none';
+                    editorSections.appendChild(editorSection[prompt]['mainContainer']);
+
+                    const sectionHeading = document.createElement('div');
+                    sectionHeading.className = 'section-heading';
+                    sectionHeading.textContent = translation.get(prompt) || prompt;
+                    editorSection[prompt]['mainContainer'].appendChild(sectionHeading);
+
+                    const propertiesContainer = document.createElement('div');
+                    propertiesContainer.className = 'properties-container';
+                    editorSection[prompt]['mainContainer'].appendChild(propertiesContainer);
+
+                    editorSection[prompt].propertyLabels = {};
+                    editorSection[prompt].propertyInputs = {};
+                    Object.keys(saveObj.data.prompts[prompt].data).forEach(attr => {
+                        if (typeof saveObj.data.prompts[prompt].data[attr] !== 'string') {
+                            return;
+                        }
+                        // 创建属性编辑组
+                        const propertyGroup = document.createElement('div');
+                        propertyGroup.className = 'property-group';
+                        propertiesContainer.appendChild(propertyGroup);
+
+                        const propertyInput = document.createElement('textarea');
+                        editorSection[prompt].propertyInputs[attr] = propertyInput;
+                        propertyInput.className = 'property-input';
+                        propertyInput.id = `${prompt}-${attr}`;
+                        propertyInput.value = saveObj.data.prompts[prompt].data[attr];
+                        
+                        editorSection[prompt].propertyLabels[attr] = document.createElement('label');
+                        editorSection[prompt].propertyLabels[attr].className = 'property-label';
+                        editorSection[prompt].propertyLabels[attr].htmlFor = propertyInput.id;
+                        editorSection[prompt].propertyLabels[attr].textContent = translation.get(attr) || attr;
+
+                        propertyGroup.appendChild(editorSection[prompt].propertyLabels[attr]);
+                        propertyGroup.appendChild(propertyInput);
+                    });
+                });
+            }
+
             // 文件选择事件
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
                 if (file) {
-                    currentFile = file;
                     fileNameDisplay.textContent = file.name;
-                    
+
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        originalFileJson = JSON.parse(e.target.result);
-                        const prompts = originalFileJson.data.prompts;
-
-                        const container = document.getElementById('jsonSections');
-                        for (const prompt in prompts) {
-                            // 创建选择器
-                            const section = document.createElement('section');
-                            section.className = 'editor-section';
-
-                            // 创建子标题
-                            const heading = document.createElement('h3');
-                            heading.className ='section-heading';
-                            heading.textContent = translation.get(prompt) || prompt;
-
-                            // 创建编辑框
-                            const textarea = document.createElement('textarea');
-                            textarea.className = 'json-content',
-                            textarea.value = prompts[prompt].data.description || '';
-                            textarea.setAttribute('data-section', translation.get(prompt) || prompt );
-
-                            section.appendChild(heading);
-                            section.appendChild(textarea);
-                            container.appendChild(section);
-
-                            // 保存编辑器
-                            promptsEditors[prompt] = textarea;
+                    reader.onload = (e) => {
+                        // 读取文件后操作
+                        try {
+                            saveObj = JSON.parse(e.target.result);
+                            saveObj_original = JSON.parse(e.target.result);
+                            populatePersonSelector(saveObj);
+                            console.log(saveObj);
+                            const emptyState = document.getElementById('emptyState');
+                            emptyState.style.display = 'none';
+                            const saveButton = document.getElementById('saveButton');
+                            saveButton.disabled = false;
+                            const resetButton = document.getElementById('resetButton');
+                            resetButton.disabled = false;
+                            showStatusMessage('文件读取成功','success');
+                        } catch (error) {
+                            showStatusMessage('JSON文件格式错误: ' + error.message, 'error');
+                            console.error(error);
                         }
 
-                        saveButton.disabled = false;
-                        hideStatusMessage();
                     };
-                    
-                    reader.onerror = function() {
+
+                    reader.onerror = function () {
                         showStatusMessage('读取文件时出错', 'error');
                     };
-                    
+
                     reader.readAsText(file);
                 }
             });
-            
+
+            // 选择人设事件
+            personSelector.addEventListener('change', (event) => {
+                const tempOption = document.getElementById('tempOption');
+                if (tempOption) {
+                    tempOption.remove();
+                }
+                console.log(personSelector.value);
+                for (let [key, value] of translation) {
+                    if (personSelector.value !== value) {
+                        continue;
+                    }
+                    for (const prompt in editorSection) {
+                        if (key === prompt) {
+                            editorSection[prompt]['mainContainer'].style.display = 'block';
+                        } else {
+                            editorSection[prompt]['mainContainer'].style.display = 'none';
+                        }
+                    }
+                    
+                }
+            });
+
             // 保存文件事件
-            saveButton.addEventListener('click', function() {
-                if (!currentFile) {
+            const saveButton = document.getElementById('saveButton');
+            saveButton.addEventListener('click', () => {
+                if (!saveObj) {
                     showStatusMessage('请先选择文件', 'error');
                     return;
                 }
-                
+
                 try {
-                    for (const prompt in promptsEditors) {
-                        originalFileJson.data.prompts[prompt].data.description = promptsEditors[prompt].value;
+                    for (const prompt in editorSection) {
+                        for (const attr in editorSection[prompt].propertyInputs) {
+                            saveObj.data.prompts[prompt].data[attr] = editorSection[prompt].propertyInputs[attr].value;
+                        }
                     }
-                    const content = JSON.stringify(originalFileJson, null, 2);
+
+                    const content = JSON.stringify(saveObj, null, 2);
                     const blob = new Blob([content], { type: 'text/plain' });
                     const url = URL.createObjectURL(blob);
                     
@@ -355,7 +242,7 @@
                     a.href = url;
                     
                     // 生成新文件名：原文件名 + "_edited"
-                    const originalName = currentFile.name;
+                    const originalName = fileNameDisplay.textContent;
                     const dotIndex = originalName.lastIndexOf('.');
                     let newName;
                     
@@ -376,49 +263,11 @@
                     showStatusMessage('保存文件时出错: ' + error.message, 'error');
                 }
             });
-            
-            // 重置内容事件
-            /*
-            resetButton.addEventListener('click', function() {
-                if (currentFile) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        fileContent.value = e.target.result;
-                        hideStatusMessage();
-                    };
-                    reader.readAsText(currentFile);
-                } else {
-                    fileContent.value = '';
-                    hideStatusMessage();
-                }
-            });
-            */
-            // 显示状态消息
-            function showStatusMessage(message, type) {
-                statusMessage.textContent = message;
-                statusMessage.className = 'status-message ' + type;
-                statusMessage.style.display = 'block';
-                
-                // 3秒后自动隐藏成功消息
-                if (type === 'success') {
-                    setTimeout(hideStatusMessage, 3000);
-                }
-            }
-            
-            // 隐藏状态消息
-            function hideStatusMessage() {
-                statusMessage.style.display = 'none';
-            }
-            
-            // 文本区域内容变化时启用保存按钮
-            /*
-            fileContent.addEventListener('input', function() {
-                if (currentFile) {
-                    saveButton.disabled = false;
-                }
-            });
-            */
+
+
+
         });
     </script>
 </body>
+
 </html>
